@@ -13,10 +13,15 @@ def apagarConexion(cur):
     cur.close()
 
 """ Universal para todo el crud, una vez teniendo el query se llama esta funcion """
-def impactarDB(query, cur):
+def impactarDB(query, cur, accion):
     cur.execute(query)  #Mandar la consulta
+    if accion == 'consultas' :
+        consulta = cur.fetchall() #Ejecutar la consulta para leer y trael lo que consigue (Aqui hacemos el READ)
+
+        return consulta
     cur.commit() #Ejecutar la consulta
     cur = apagarConexion(cur)
+
 
 """ Recorrer la lista para generar el query de crear """
 def crear(nombreTabla, llavePrimaria, cur, campos):
@@ -38,6 +43,13 @@ def crear(nombreTabla, llavePrimaria, cur, campos):
         print(' -------> Se creo la tabla correctamente <----------')
     except :
         print('No se pudo ejecutar el query, revisa que los tipos de datos esten bien escritos' )
+
+def informacionCiudades():
+    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+    query = 'SELECT * FROM ciudades'
+    print(impactarDB(query,cur, 'consultas'))
+    exit
+
 
 
 """ Pedir datos al usuario """
@@ -75,5 +87,12 @@ def crearTabla():
                            print('Valor ingresado no valido, Volviendo al menu principal... ')
                            continuar = False
 
-
+def crearZoo():
+    try:
+        idZoo = input('Ingresa el Id del Zoo --->')
+        nombre = input('Ingresa en nombre del Zoo --->')
+        tamanio = float(input('Ingresa el tamanio del zoologico --->'))
+        presupuesto = float(input('Ingresa el presupuesto--->'))
+    except :
+        print('No se ingresaron los valores correctamente')
 
