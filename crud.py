@@ -104,8 +104,9 @@ def crearZoo():
             print(f'{ciudad.idCiudad} ) {ciudad.nombre}') #recorremos las ciudades para elegir uno
             contador += 1
         ciudad = int(input('Ingresa el numero de la ciudad  ---> '))
-        if(ciudad >= contador):
-            print('si')
+        if(ciudad >= contador or ciudad <= 0):
+            print('Valor ingresado no valido, porfavor vuelve a intentarlo')
+            exit
     except :
-        print('No se ingresaron los valores correctamente')
+        print('Valor incorrecto o no valido')
 
