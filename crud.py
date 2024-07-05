@@ -1,3 +1,4 @@
+from xmlrpc.client import boolean
 import conexionDB as cbd 
 """ Importamos del archivo que hacemos nuestra conexion como cbd = conexion base de datos """
 
@@ -110,3 +111,45 @@ def crearZoo():
     except :
         print('Valor incorrecto o no valido')
 
+def crearNuevaEspecie():
+    try:
+        # idEspecie, nombreV, nombreC, familia, peligro 
+        idEspecie = input('Ingresa el Id de la Especie --->')
+        nombreV = input('Ingresa en nombre vulgar de la Especie --->')
+        nombreC = input('Ingresa en nombre Cientifico de la Especie --->')
+        familia = input('Ingresa en nombre de la familia de la Especie --->')
+        peligro = boolean(input('¿La Especie esta en peligro? --->'))
+    except :
+        print('No se ingresaron los valores correctamente')
+
+def informacionEspecies():
+    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+    query = 'SELECT * FROM especies'
+    return impactarDB(query,cur, 'consultas')
+def eliminiarEspecie():
+    try:
+        print('Selecciona la especie a eliminar, usa cualquiera de la siguientes opciones')
+        especies = informacionEspecies()
+        for especie in especies:
+            print(f'{especie.idespecie} ) {especie.nombre}') #recorremos las especies para elegir una
+            contador += 1
+        idEspecie = int(input('Ingresa el numero de la especie  ---> '))
+        eliminiarEspecie(idEspecie)
+    except :
+        print('No se ingresaron los valores correctamente')
+
+def informacionZoos():
+    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+    query = 'SELECT * FROM zoologicos'
+    return impactarDB(query,cur, 'consultas')
+def modificarZoo():
+    try:
+        print('Selecciona el Zoologico a modificar, usa cualquiera de la siguientes opciones')
+        zoos = informacionZoos()
+        for zoo in zoos:
+            print(f'{zoo.idZoo} ) {zoo.nombre}') #recorremos los Zoos para elegir una
+            contador += 1
+        idZoo = int(input('Ingresa el numero del Zoo  ---> '))
+        modificarZoo(idZoo)
+    except :
+        print('No se ingresaron los valores correctamente')
