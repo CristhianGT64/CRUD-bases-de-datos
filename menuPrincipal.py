@@ -7,8 +7,8 @@ while continuar:
     try:
         print("******** MENU ZOOLOGICO********")
         print("1. Crear un nueva tabla (CREATE)")
-        print("2. Mostrar todos los productos")
-        print("3. Mostrar un producto")
+        print("2. Ingresar un nuevo Zoo")
+        print("3. Ingresar una nueva Especie")
         print("4. Ingresar al inventario")
         print("5. Quitar del inventario")
         print("6. Salir")

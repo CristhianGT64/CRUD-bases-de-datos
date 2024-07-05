@@ -12,6 +12,13 @@ def encederConexion():
 def apagarConexion(cur):
     cur.close()
 
+""" Universal para todo el crud, una vez teniendo el query se llama esta funcion """
+def impactarDB(query, cur):
+    cur.execute(query)  #Mandar la consulta
+    cur.commit() #Ejecutar la consulta
+    cur = apagarConexion(cur)
+
+""" Recorrer la lista para generar el query de crear """
 def crear(nombreTabla, llavePrimaria, cur, campos):
     """ query para crear tablas """
     query = "CREATE TABLE " + nombreTabla + " ( "
@@ -20,16 +27,20 @@ def crear(nombreTabla, llavePrimaria, cur, campos):
     """ Ingresar al query los campos y su valor """
     
     for vercampos in campos: #Recorremos la lista o arreglo donde estan los campos
-        for valorCampo in vercampos.values(): #Recorremos los diccionarios para obtener los tipoDtoes nombreCampo y tipoDto
+        for valorCampo in vercampos.values(): #Recorremos los diccionarios para obtener los valores de los campos
                 query += valorCampo + ' '
         query += ', ' #Ponemos una , despues de cada campo
     query += ' );' #Cerramos todo
     
     """ Impactamos la base de datos con el query que generamos con valores ingresados por el usuario"""
+    try:
+        impactarDB(query, cur)
+        print(' -------> Se creo la tabla correctamente <----------')
+    except :
+        print('No se pudo ejecutar el query, revisa que los tipos de datos esten bien escritos' )
 
 
-
-
+""" Pedir datos al usuario """
 def crearTabla():
     """ Encedemos la conexion con la base de datos """
     cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
@@ -63,8 +74,6 @@ def crearTabla():
                         case _:
                            print('Valor ingresado no valido, Volviendo al menu principal... ')
                            continuar = False
-
-    cur = apagarConexion(cur)
 
 
 
