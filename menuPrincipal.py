@@ -21,7 +21,7 @@ while continuar:
                 """ Enviar al formulario de crear un nueva tabla a crud"""
                 crud.crearTabla()
             case 2:
-                crud.informacionCiudades();
+                crud.crearZoo()
             case 6:
                 continuar =False
             case _:

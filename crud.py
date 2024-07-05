@@ -17,7 +17,6 @@ def impactarDB(query, cur, accion):
     cur.execute(query)  #Mandar la consulta
     if accion == 'consultas' :
         consulta = cur.fetchall() #Ejecutar la consulta para leer y trael lo que consigue (Aqui hacemos el READ)
-
         return consulta
     cur.commit() #Ejecutar la consulta
     cur = apagarConexion(cur)
@@ -44,11 +43,15 @@ def crear(nombreTabla, llavePrimaria, cur, campos):
     except :
         print('No se pudo ejecutar el query, revisa que los tipos de datos esten bien escritos' )
 
+""" Conseguir informacion de las ciudades disponibles en la base de datos """
 def informacionCiudades():
     cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = 'SELECT * FROM ciudades'
-    print(impactarDB(query,cur, 'consultas'))
-    exit
+    return impactarDB(query,cur, 'consultas')
+
+def realizarInsert(lista, nombreTabla):
+    cur = encederConexion()
+    query = 'INSERT INTO ' + nombreTabla + ' '
 
 
 
@@ -88,11 +91,21 @@ def crearTabla():
                            continuar = False
 
 def crearZoo():
+    tuplas = []
+    contador = 0
     try:
-        idZoo = input('Ingresa el Id del Zoo --->')
-        nombre = input('Ingresa en nombre del Zoo --->')
-        tamanio = float(input('Ingresa el tamanio del zoologico --->'))
-        presupuesto = float(input('Ingresa el presupuesto--->'))
+        tuplas.append(input('Ingresa el Id del Zoo --->'))
+        tuplas.append(input('Ingresa en nombre del Zoo --->'))
+        tuplas.append(float(input('Ingresa el tamanio del zoologico --->')))
+        tuplas.append(float(input('Ingresa el presupuesto--->')))
+        print('Pais que se encuentra el zoo, usa cualquiera de la siguientes opciones')
+        ciudades = informacionCiudades()
+        for ciudad in ciudades:
+            print(f'{ciudad.idCiudad} ) {ciudad.nombre}') #recorremos las ciudades para elegir uno
+            contador += 1
+        ciudad = int(input('Ingresa el numero de la ciudad  ---> '))
+        if(ciudad >= contador):
+            print('si')
     except :
         print('No se ingresaron los valores correctamente')
 
