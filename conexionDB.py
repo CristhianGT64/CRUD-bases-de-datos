@@ -14,9 +14,7 @@ def conexionDB(cadenaConexion):
     try:
         """ Intentamos que se realice la conexion con la base de datos almacenando la conexion 
          en la variable de conexion """
-        print(cadenaConexion)
         conexion = pyodbc.connect(cadenaConexion)
-        print(conexion)
         return conexion #Retornamos la conexion con la base de datos
     except pyodbc.Error as error:
         print('Error al conectarse a la base de datos presentado por: ', error )

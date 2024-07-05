@@ -9,7 +9,7 @@ cur = conexion.cursor() #Crearemos un cursor que nos permite manipular nuestra b
 """ Prueba de creacion de una tabla """
 sql = "CREATE TABLE prueba2 ( "
 sql += "idPrueba INTEGER PRIMARY KEY, "
-sql += "nombre1 VARCHAR(255)"
+sql += "nombre1 VARCHAR(255),"
 sql += ' );'
 
 cur.execute(sql)  #Mandar la consulta

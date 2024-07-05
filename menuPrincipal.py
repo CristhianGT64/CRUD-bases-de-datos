@@ -1,11 +1,12 @@
-opcion = 0
-contador = 0
-continuar = True
+import crud #Importames el archivo de crud para las funciones
+
+opcion = 0 #Para el menu
+continuar = True #Para salir del menu
 
 while continuar:
     try:
-        print("******** MENU ********")
-        print("1. Ingresar un producto")
+        print("******** MENU ZOOLOGICO********")
+        print("1. Crear un nueva tabla (CREATE)")
         print("2. Mostrar todos los productos")
         print("3. Mostrar un producto")
         print("4. Ingresar al inventario")
@@ -15,4 +16,11 @@ while continuar:
     except:
         print(" ****** VALOR INVALIDO ******")
     else:
-        print(False)
+        match(opcion):
+            case 1:
+                """ Enviar al formulario de crear un nueva tabla a crud"""
+                crud.crearTabla()
+            case 6:
+                continuar =False
+            case _:
+                print("Valor ingresado no valido")
