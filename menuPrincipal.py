@@ -8,10 +8,9 @@ while continuar:
         print("******** MENU ZOOLOGICO********")
         print("1. Crear un nueva tabla (CREATE)")
         print("2. Ingresar un nuevo Zoo")
-        print("3. Ingresar una nueva Especie")
-        print("4. Eliminar una especie de un zoo")
-        print("5. Actualizar datos de Zoo")
-        print("6. Salir")
+        print("3. Eliminar una especie de un zoo")
+        print("4. Actualizar datos de Zoo")
+        print("5. Salir")
         opcion = int(input("Ingresa una opcion: "))
     except:
         print(" ****** VALOR INVALIDO ******")
@@ -22,6 +21,8 @@ while continuar:
                 crud.crearTabla()
             case 2:
                 crud.crearZoo()
+            case 3:
+                crud.eliminiarEspecie()
             case 6:
                 continuar =False
             case _:

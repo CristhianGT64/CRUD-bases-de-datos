@@ -50,7 +50,7 @@ CREATE TABLE zoologicos (
 	nombre VARCHAR(200),
 	tamanio DECIMAL,
 	presupuesto MONEY,
-	idCiudad INTEGER UNIQUE REFERENCES Ciudades(idCiudad)
+	idCiudad INTEGER REFERENCES Ciudades(idCiudad)
 );
 
 
@@ -77,6 +77,22 @@ SELECT * FROM ciudades;
 INSERT INTO ciudades VALUES('BERLIN', 123.2332323232, 124.432432432, 1), ('MADRID', 150.21321321, 154.1321321, 2)
 
 SELECT * FROM zoologicos;
+SELECT * FROM Especies
+select * from informacionAnimales
+SELECT * FROM especieAnimales
 --Ingresar Zoologico
-INSERT INTO zoologicos VALUES (3, 'La Joya', 2500, 400000000, 1)
+-- INSERT INTO zoologicos VALUES (3, 'La Joya', 2500, 400000000, 1)
+
+-- INSERT INTO zoologicos VALUES ( 2,  ' dsankjfds ' , 32321321.0, 312321.0, 2 );
+
+INSERT INTO Especies VALUES('viparos'), ('oviparos'), ('terrestres'), ('Acueaticos'), ('aereos'), ('carnivoros')
+
+INSERT INTO informacionAnimales VALUES(2, 'macho', 2017, 5, 1 ), (3, 'hembra', 2019, 1, 4 )
+
+-- INSERT INTO informacionAnimales VALUES(1,'Leon', ' Panthera leo', 'Felidae', 1, 6)
+
+INSERT INTO especieAnimales VALUES(1,'leon', 'Panthera leo', 'Felidae', 0, 1), (2,'Elefante africano ', 'Loxodonta africana', 'Elephantidae', 1, 3)
+
+
+
 
