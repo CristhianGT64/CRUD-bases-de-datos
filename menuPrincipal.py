@@ -23,7 +23,7 @@ while continuar:
                 crud.crearZoo()
             case 3:
                 crud.eliminiarEspecie()
-            case 6:
+            case 5:
                 continuar =False
             case _:
                 print("Valor ingresado no valido")

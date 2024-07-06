@@ -50,6 +50,22 @@ def informacionCiudades():
     query = 'SELECT * FROM ciudades'
     return impactarDB(query,cur, 'consultas')
 
+def informacionZoo():
+    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+    query = 'SELECT * FROM zoologicos'
+    return impactarDB(query,cur, 'consultas')
+
+def informacionAnimales():
+    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+    query = 'SELECT * FROM especieAnimales'
+    return impactarDB(query,cur, 'consultas')
+
+
+def InformacionAnimalZoo(numZoo):
+    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+    query = 'SELECT * FROM espciesZoologicos WHERE idZoo = ' + str(numZoo)
+    return impactarDB(query,cur, 'consultas')
+
 def realizarInsert(lista, nombreTabla):
     cur = encederConexion()
     query = 'INSERT INTO ' + nombreTabla + ' VALUES ( '
@@ -60,6 +76,12 @@ def realizarInsert(lista, nombreTabla):
     query += ' );'
     impactarDB(query, cur)
     print(' ---Ingresado correctamente--- ')
+
+def realizarDelete(tabla, codigozoo, codigoAnimal):
+    cur = encederConexion()
+    query = f' DELETE FROM  {tabla} where idEspecie = {str(codigoAnimal)} and idZoo = {str(codigozoo)}'
+    print(query)
+    return impactarDB(query,cur, 'Eliminar')
 
 
 
@@ -124,38 +146,57 @@ def crearZoo():
     except :
         print('Valor incorrecto o no valido')
 
-def crearNuevaEspecie():
-    try:
-        # idEspecie, nombreV, nombreC, familia, peligro 
-        idEspecie = input('Ingresa el Id de la Especie --->')
-        nombreV = input('Ingresa en nombre vulgar de la Especie --->')
-        nombreC = input('Ingresa en nombre Cientifico de la Especie --->')
-        familia = input('Ingresa en nombre de la familia de la Especie --->')
-        peligro = boolean(input('¿La Especie esta en peligro? --->'))
-    except :
-        print('No se ingresaron los valores correctamente')
-
-def informacionEspecies():
-    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
-    query = 'SELECT * FROM especies'
-    return impactarDB(query,cur, 'consultas')
 
 def eliminiarEspecie():
+    codigosZoo = []
+    codigoAnimal = []
+    numZoo = 0
+    numAnimal = 0
+    seguir = True
     try:
-        print('Selecciona la especie a eliminar, usa cualquiera de la siguientes opciones')
-        especies = informacionEspecies()
-        for especie in especies:
-            print(f'{especie.idespecie} ) {especie.nombre}') #recorremos las especies para elegir una
-            contador += 1
-        idEspecie = int(input('Ingresa el numero de la especie  ---> '))
-        eliminiarEspecie(idEspecie)
+        print('Selecciona un zoologico')
+        zoologicos = informacionZoo() #Mandar a llamar los zoo en db
+        for zoo in zoologicos: #Recorrer la lista de zoo
+            print(f'{zoo.idZoo} ) {zoo.nombre}') #recorremos las ciudades para elegir uno
+            codigosZoo.append(zoo.idZoo)
+        while seguir:
+            numZoo = int(input('Ingresa el numero de la ciudad  ---> '))
+            if( numZoo in codigosZoo ):
+                print('Existe el codgio en la lista')
+                animalxZoo = InformacionAnimalZoo(numZoo)
+                animales = informacionAnimales()
+                print('Animales disponibles: ')
+                for animalzoo in animalxZoo: #Ingresamos que animales estan en el zoo que se eligio
+                    codigoAnimal.append(animalzoo.idEspecie)
+                print(codigoAnimal)
+                for animal in animales:
+                    print(f'{animal.idEspecie} ) Nombre Vulgar: {animal.nombreVulgar}')
+                while True:
+                    numAnimal = int(input('Ingrese el codigo del animal -->'))
+                    if(numAnimal in codigoAnimal):
+                        print('Se encontro el animal en el zoo, eliminando...')
+                        realizarDelete("espciesZoologicos", numZoo, numAnimal)
+                        print('Se quito el animal del zoo')
+                        break;
+                    else:
+                        print('Este animal no esta disponible en este zoo')
+
+
+                seguir = False
+            else:
+                print('No existe el codigo en la lista')
+
+
+
+        # especies = informacionEspecies()
+        # for especie in especies:
+        #     print(f'{especie.idespecie} ) {especie.nombre}') #recorremos las especies para elegir una
+        #     contador += 1
+        # idEspecie = int(input('Ingresa el numero de la especie  ---> '))
+        # eliminiarEspecie(idEspecie)
     except :
         print('No se ingresaron los valores correctamente')
 
-def informacionZoos():
-    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
-    query = 'SELECT * FROM zoologicos'
-    return impactarDB(query,cur, 'consultas')
 
 def modificarZoo():
     try:
