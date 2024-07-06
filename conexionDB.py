@@ -2,7 +2,7 @@
 
 import pyodbc
 server = 'DESKTOP-72I1FFA\SQLEXPRESS'
-database = 'prueba'
+database = 'zoo'
 username = 'python'
 password = 'root'
 

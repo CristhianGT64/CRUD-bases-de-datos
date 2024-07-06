@@ -14,7 +14,7 @@ def apagarConexion(cur):
     cur.close()
 
 """ Universal para todo el crud, una vez teniendo el query se llama esta funcion """
-def impactarDB(query, cur, accion):
+def impactarDB(query, cur, accion = None):
     cur.execute(query)  #Mandar la consulta
     if accion == 'consultas' :
         consulta = cur.fetchall() #Ejecutar la consulta para leer y trael lo que consigue (Aqui hacemos el READ)
@@ -52,7 +52,14 @@ def informacionCiudades():
 
 def realizarInsert(lista, nombreTabla):
     cur = encederConexion()
-    query = 'INSERT INTO ' + nombreTabla + ' '
+    query = 'INSERT INTO ' + nombreTabla + ' VALUES ( '
+    for i, datos in enumerate(lista):
+        query += str(datos)
+        if (i < len(lista) - 1):
+            query += ', '
+    query += ' );'
+    impactarDB(query, cur)
+    print(' ---Ingresado correctamente--- ')
 
 
 
@@ -94,9 +101,11 @@ def crearTabla():
 def crearZoo():
     tuplas = []
     contador = 0
+    numCiudad = 0
     try:
         tuplas.append(input('Ingresa el Id del Zoo --->'))
-        tuplas.append(input('Ingresa en nombre del Zoo --->'))
+        nombre = (input('Ingresa en nombre del Zoo --->'))
+        tuplas.append(" ' " + nombre + " ' ")
         tuplas.append(float(input('Ingresa el tamanio del zoologico --->')))
         tuplas.append(float(input('Ingresa el presupuesto--->')))
         print('Pais que se encuentra el zoo, usa cualquiera de la siguientes opciones')
@@ -104,10 +113,14 @@ def crearZoo():
         for ciudad in ciudades:
             print(f'{ciudad.idCiudad} ) {ciudad.nombre}') #recorremos las ciudades para elegir uno
             contador += 1
-        ciudad = int(input('Ingresa el numero de la ciudad  ---> '))
-        if(ciudad >= contador or ciudad <= 0):
-            print('Valor ingresado no valido, porfavor vuelve a intentarlo')
-            exit
+        while (numCiudad <= 0 or numCiudad > contador):
+            numCiudad = int(input('Ingresa el numero de la ciudad  ---> '))
+            if( numCiudad <= 0 or numCiudad > contador ):
+                print('Valor ingresado no valido, porfavor vuelve a intentarlo')
+        tuplas.append(numCiudad)
+        # print(tuplas)
+        realizarInsert(tuplas, 'zoologicos')
+        print('Se ingreso el zoologico correctamente')
     except :
         print('Valor incorrecto o no valido')
 
@@ -126,6 +139,7 @@ def informacionEspecies():
     cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = 'SELECT * FROM especies'
     return impactarDB(query,cur, 'consultas')
+
 def eliminiarEspecie():
     try:
         print('Selecciona la especie a eliminar, usa cualquiera de la siguientes opciones')
@@ -142,6 +156,7 @@ def informacionZoos():
     cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = 'SELECT * FROM zoologicos'
     return impactarDB(query,cur, 'consultas')
+
 def modificarZoo():
     try:
         print('Selecciona el Zoologico a modificar, usa cualquiera de la siguientes opciones')
