@@ -225,4 +225,34 @@ def viewTables():
             
     except:
         print('Error en leer las tablas')
-      
+
+def select_table(table_name):
+    cur = encederConexion();
+    try:        
+        select_query = f"SELECT * FROM {table_name}"   
+
+        filas= impactarDB(select_query,cur,'consultas')
+
+         # Obtener los nombres de las columnas
+        columnas = [column[0] for column in cur.description]
+
+         # Determinar el ancho máximo de cada columna
+        col_widths = [len(col) for col in columnas]
+        for fila in filas:
+            for i, cell in enumerate(fila):
+                col_widths[i] = max(col_widths[i], len(str(cell)))
+        
+        # Formatear la fila de encabezado
+        encabezado = " | ".join(f"{col:<{col_widths[i]}}" for i, col in enumerate(columnas))
+        separator = "-+-".join("-" * col_widths[i] for i in range(len(columnas)))
+
+        print(encabezado)
+        print(separator)
+
+         # Imprimir las filas de datos
+        for fila in filas:
+            formatoFila = " | ".join(f"{str(cell):<{col_widths[i]}}" for i, cell in enumerate(fila))
+            print(formatoFila)
+  
+    except:
+        print('Error en leer la tabla, verifique si coloco correctamente el nombre de la tabla')      
