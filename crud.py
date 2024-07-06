@@ -55,6 +55,17 @@ def informacionZoo():
     query = 'SELECT * FROM zoologicos'
     return impactarDB(query,cur, 'consultas')
 
+def informacionZooEspecifico(idZoo):
+    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+    query = 'SELECT * FROM zoologicos where idZoo = ' + str(idZoo)
+    return impactarDB(query,cur, 'consultas')
+
+def modificar(atributo,nvoDato, idZoo ):
+    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+    query = f"UPDATE zoologicos SET {str(atributo)} = '{str(nvoDato)}' where idZoo = {str(idZoo)}"
+    return impactarDB(query,cur, 'Actualizar')
+
+
 def informacionAnimales():
     cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = 'SELECT * FROM especieAnimales'
@@ -185,27 +196,52 @@ def eliminiarEspecie():
                 seguir = False
             else:
                 print('No existe el codigo en la lista')
-
-
-
-        # especies = informacionEspecies()
-        # for especie in especies:
-        #     print(f'{especie.idespecie} ) {especie.nombre}') #recorremos las especies para elegir una
-        #     contador += 1
-        # idEspecie = int(input('Ingresa el numero de la especie  ---> '))
-        # eliminiarEspecie(idEspecie)
     except :
         print('No se ingresaron los valores correctamente')
 
 
 def modificarZoo():
+    codigosZoo = []
+    actu = 0
+    atributo = ""
+    nvoValor = ''
     try:
         print('Selecciona el Zoologico a modificar, usa cualquiera de la siguientes opciones')
-        zoos = informacionZoos()
-        for zoo in zoos:
-            print(f'{zoo.idZoo} ) {zoo.nombre}') #recorremos los Zoos para elegir una
-            contador += 1
-        idZoo = int(input('Ingresa el numero del Zoo  ---> '))
-        modificarZoo(idZoo)
+        zoologicos = informacionZoo()
+        for zoo in zoologicos: #Recorrer la lista de zoo
+            print(f'{zoo.idZoo} ) {zoo.nombre}') #recorremos las ciudades para elegir uno
+            codigosZoo.append(zoo.idZoo)
+        while True:
+            idZoo = int(input('Ingresa el numero del Zoo  ---> '))
+            if (idZoo in codigosZoo):
+                print('Informacion actual de zoo:')
+                zoo = informacionZooEspecifico(idZoo)
+                """ hacer menu para que elija que actualizar """
+                try:
+                    print(f'Nombre zoo:{zoo[0].nombre} tamanio: {zoo[0].tamanio} presupuesto: {zoo[0].presupuesto}')
+                    print('Modificar: \n 1)nombre\n2)Tamanio\n3)presupuesto')
+                    actu = int(input('--->'))
+                except :
+                    print('No se pudo actualizar el registro')
+                else:
+                    match(actu):
+                        case 1 :
+                            nvoValor = input('Ingresa el nuevo Nombre del Zoo -->')
+                            atributo = "nombre"
+                        case 2:
+                            nvoValor = float(input('Ingresa el nuevo tamanio del Zoo -->'))
+                            atributo = "tamanio"
+                        case 3:
+                            nvoValor = float(input('Ingresa el presupuesto Nombre del Zoo -->'))
+                            atributo = "presupuesto"
+                        case _:
+                            print('Dato ingresado no valido')
+                    modificar(atributo, nvoValor, idZoo)
+                    print('Se actualizaron los datos correctamente')
+                break;
+            else:
+                print('No se encontro el zoo')
+
+        # modificarZoo(idZoo)
     except :
         print('No se ingresaron los valores correctamente')

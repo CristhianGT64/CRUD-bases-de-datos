@@ -77,8 +77,9 @@ SELECT * FROM ciudades;
 INSERT INTO ciudades VALUES('BERLIN', 123.2332323232, 124.432432432, 1), ('MADRID', 150.21321321, 154.1321321, 2)
 
 SELECT * FROM zoologicos;
-SELECT * FROM Especies
-select * from informacionAnimales
+SELECT * FROM espciesZoologicos;
+--SELECT * FROM Especies
+--select * from informacionAnimales
 SELECT * FROM especieAnimales
 --Ingresar Zoologico
 -- INSERT INTO zoologicos VALUES (3, 'La Joya', 2500, 400000000, 1)
@@ -93,6 +94,15 @@ INSERT INTO informacionAnimales VALUES(2, 'macho', 2017, 5, 1 ), (3, 'hembra', 2
 
 INSERT INTO especieAnimales VALUES(1,'leon', 'Panthera leo', 'Felidae', 0, 1), (2,'Elefante africano ', 'Loxodonta africana', 'Elephantidae', 1, 3)
 
+--INSERT INTO espciesZoologicos VALUES(5, 432432,1)
 
+-- DELETE FROM  espciesZoologicos where idEspecie = 2 and idZoo = 432432
+-- DELETE FROM  espciesZoologicos where idEspecie = 1 and idZoo = 432432
+-- DELETE FROM  espciesZoologicos where idEspecie = 2 and idZoo = 45
 
+-- SELECT * FROM espciesZoologicos WHERE idZoo = 2
 
+SELECT * FROM zoologicos where idZoo = 2;
+
+--UPDATE zoologicos SET nombre = 'prueba' where idZoo = 2
+UPDATE zoologicos SET nombre = 'Buenos Aires' where idZoo = 2
