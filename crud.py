@@ -209,3 +209,20 @@ def modificarZoo():
         modificarZoo(idZoo)
     except :
         print('No se ingresaron los valores correctamente')
+
+def viewTables():
+    cur = encederConexion();
+    contador=1;
+    try:       
+       #Consulta que muestra el nombre de todas las tablas de la base de datos  
+        query = "SELECT table_name FROM information_schema.tables WHERE table_type ='BASE TABLE';"
+        
+        #Realizar la consulta
+        tables=impactarDB(query,cur,"consultas")
+        for table in tables:
+            print(f'{contador} ) {table.table_name}')
+            contador +=1;
+            
+    except:
+        print('Error en leer las tablas')
+      
