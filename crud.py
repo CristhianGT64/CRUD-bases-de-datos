@@ -245,3 +245,50 @@ def modificarZoo():
         # modificarZoo(idZoo)
     except :
         print('No se ingresaron los valores correctamente')
+
+def viewTables():
+    cur = encederConexion();
+    contador=1;
+    try:       
+       #Consulta que muestra el nombre de todas las tablas de la base de datos  
+        query = "SELECT table_name FROM information_schema.tables WHERE table_type ='BASE TABLE';"
+        
+        #Realizar la consulta
+        tables=impactarDB(query,cur,"consultas")
+        for table in tables:
+            print(f'{contador} ) {table.table_name}')
+            contador +=1;
+            
+    except:
+        print('Error en leer las tablas')
+
+def select_table(table_name):
+    cur = encederConexion();
+    try:        
+        select_query = f"SELECT * FROM {table_name}"   
+
+        filas= impactarDB(select_query,cur,'consultas')
+
+         # Obtener los nombres de las columnas
+        columnas = [column[0] for column in cur.description]
+
+         # Determinar el ancho máximo de cada columna
+        col_widths = [len(col) for col in columnas]
+        for fila in filas:
+            for i, cell in enumerate(fila):
+                col_widths[i] = max(col_widths[i], len(str(cell)))
+        
+        # Formatear la fila de encabezado
+        encabezado = " | ".join(f"{col:<{col_widths[i]}}" for i, col in enumerate(columnas))
+        separator = "-+-".join("-" * col_widths[i] for i in range(len(columnas)))
+
+        print(encabezado)
+        print(separator)
+
+         # Imprimir las filas de datos
+        for fila in filas:
+            formatoFila = " | ".join(f"{str(cell):<{col_widths[i]}}" for i, cell in enumerate(fila))
+            print(formatoFila)
+  
+    except:
+        print('Error en leer la tabla, verifique si coloco correctamente el nombre de la tabla')      
