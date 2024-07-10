@@ -12,7 +12,10 @@ def menuPrincipal (conexion):
             print("3. Eliminar una especie de un zoo")
             print("4. Actualizar datos de Zoo")
             print("5.Leer datos de la tablas")
-            print("6. Salir")
+            print('6. Otorgar Permisos')
+            print('7. Quitar Permisos')
+            print('8. Crear un nuevo usuario')
+            print("9. Salir")
             opcion = int(input("Ingresa una opcion: "))
         except:
             print(" ****** VALOR INVALIDO ******")
@@ -35,6 +38,8 @@ def menuPrincipal (conexion):
                     crud.select_table(nameTable, conexion)
                     print("\n")    
                 case 6:
+                    print('si')
+                case 9:
                     continuar =False
                 case _:
                     print("Valor ingresado no valido")
