@@ -5,8 +5,8 @@ import conexionDB as cbd
 """ Variables globales """
 
 
-def encederConexion():
-    conexion = cbd.iniciarConexion() #Decimos que conexion es igual al objeto de la conexion para instanciarlo
+def encederConexion(conexion):
+    # conexion = cbd.iniciarConexion() #Decimos que conexion es igual al objeto de la conexion para instanciarlo
     cur = conexion.cursor() #Crearemos un cursor que nos permite manipular nuestra base de datos
     return cur
 
@@ -14,13 +14,14 @@ def apagarConexion(cur):
     cur.close()
 
 """ Universal para todo el crud, una vez teniendo el query se llama esta funcion """
-def impactarDB(query, cur, accion = None):
+def impactarDB(query, conexion, accion = None):
+    cur = conexion.cursor()
     cur.execute(query)  #Mandar la consulta
     if accion == 'consultas' :
         consulta = cur.fetchall() #Ejecutar la consulta para leer y trael lo que consigue (Aqui hacemos el READ)
         return consulta
     cur.commit() #Ejecutar la consulta
-    cur = apagarConexion(cur)
+    cur.close()
 
 
 """ Recorrer la lista para generar el query de crear """
@@ -45,40 +46,40 @@ def crear(nombreTabla, llavePrimaria, cur, campos):
         print('No se pudo ejecutar el query, revisa que los tipos de datos esten bien escritos' )
 
 """ Conseguir informacion de las ciudades disponibles en la base de datos """
-def informacionCiudades():
-    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+def informacionCiudades(cur):
+    # cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = 'SELECT * FROM ciudades'
     return impactarDB(query,cur, 'consultas')
 
-def informacionZoo():
-    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+def informacionZoo(cur):
+    # cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = 'SELECT * FROM zoologicos'
     return impactarDB(query,cur, 'consultas')
 
-def informacionZooEspecifico(idZoo):
-    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+def informacionZooEspecifico(idZoo, cur):
+    # cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = 'SELECT * FROM zoologicos where idZoo = ' + str(idZoo)
     return impactarDB(query,cur, 'consultas')
 
-def modificar(atributo,nvoDato, idZoo ):
-    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+def modificar(atributo,nvoDato, idZoo , cur):
+    # cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = f"UPDATE zoologicos SET {str(atributo)} = '{str(nvoDato)}' where idZoo = {str(idZoo)}"
     return impactarDB(query,cur, 'Actualizar')
 
 
-def informacionAnimales():
-    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+def informacionAnimales(cur):
+    # cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = 'SELECT * FROM especieAnimales'
     return impactarDB(query,cur, 'consultas')
 
 
-def InformacionAnimalZoo(numZoo):
-    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+def InformacionAnimalZoo(numZoo, cur):
+    # cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     query = 'SELECT * FROM espciesZoologicos WHERE idZoo = ' + str(numZoo)
     return impactarDB(query,cur, 'consultas')
 
-def realizarInsert(lista, nombreTabla):
-    cur = encederConexion()
+def realizarInsert(lista, nombreTabla, cur):
+    # cur = encederConexion()
     query = 'INSERT INTO ' + nombreTabla + ' VALUES ( '
     for i, datos in enumerate(lista):
         query += str(datos)
@@ -88,18 +89,18 @@ def realizarInsert(lista, nombreTabla):
     impactarDB(query, cur)
     print(' ---Ingresado correctamente--- ')
 
-def realizarDelete(tabla, codigozoo, codigoAnimal):
-    cur = encederConexion()
+def realizarDelete(tabla, codigozoo, codigoAnimal, cur):
+    # cur = encederConexion()
     query = f' DELETE FROM  {tabla} where idEspecie = {str(codigoAnimal)} and idZoo = {str(codigozoo)}'
-    print(query)
+    # print(query)
     return impactarDB(query,cur, 'Eliminar')
 
 
 
 """ Pedir datos al usuario """
-def crearTabla():
+def crearTabla(cur):
     """ Encedemos la conexion con la base de datos """
-    cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
+    # cur = encederConexion() #Traemos el cursos para hacer modficaciones en la base de datos
     campos = []
     opcion = ""
     continuar = True
@@ -131,7 +132,7 @@ def crearTabla():
                            print('Valor ingresado no valido, Volviendo al menu principal... ')
                            continuar = False
 
-def crearZoo():
+def crearZoo(cur):
     tuplas = []
     contador = 0
     numCiudad = 0
@@ -141,8 +142,9 @@ def crearZoo():
         tuplas.append(" ' " + nombre + " ' ")
         tuplas.append(float(input('Ingresa el tamanio del zoologico --->')))
         tuplas.append(float(input('Ingresa el presupuesto--->')))
-        print('Pais que se encuentra el zoo, usa cualquiera de la siguientes opciones')
-        ciudades = informacionCiudades()
+        print('Ciudad que se encuentra el zoo, usa cualquiera de la siguientes opciones')
+        ciudades = informacionCiudades(cur)
+        print('Se encontraron las ciudades')
         for ciudad in ciudades:
             print(f'{ciudad.idCiudad} ) {ciudad.nombre}') #recorremos las ciudades para elegir uno
             contador += 1
@@ -152,13 +154,13 @@ def crearZoo():
                 print('Valor ingresado no valido, porfavor vuelve a intentarlo')
         tuplas.append(numCiudad)
         # print(tuplas)
-        realizarInsert(tuplas, 'zoologicos')
+        realizarInsert(tuplas, 'zoologicos', cur)
         print('Se ingreso el zoologico correctamente')
     except :
         print('Valor incorrecto o no valido')
 
 
-def eliminiarEspecie():
+def eliminiarEspecie(cur):
     codigosZoo = []
     codigoAnimal = []
     numZoo = 0
@@ -166,7 +168,7 @@ def eliminiarEspecie():
     seguir = True
     try:
         print('Selecciona un zoologico')
-        zoologicos = informacionZoo() #Mandar a llamar los zoo en db
+        zoologicos = informacionZoo(cur) #Mandar a llamar los zoo en db
         for zoo in zoologicos: #Recorrer la lista de zoo
             print(f'{zoo.idZoo} ) {zoo.nombre}') #recorremos las ciudades para elegir uno
             codigosZoo.append(zoo.idZoo)
@@ -174,8 +176,8 @@ def eliminiarEspecie():
             numZoo = int(input('Ingresa el numero de la ciudad  ---> '))
             if( numZoo in codigosZoo ):
                 print('Existe el codgio en la lista')
-                animalxZoo = InformacionAnimalZoo(numZoo)
-                animales = informacionAnimales()
+                animalxZoo = InformacionAnimalZoo(numZoo, cur)
+                animales = informacionAnimales(cur)
                 print('Animales disponibles: ')
                 for animalzoo in animalxZoo: #Ingresamos que animales estan en el zoo que se eligio
                     codigoAnimal.append(animalzoo.idEspecie)
@@ -186,7 +188,7 @@ def eliminiarEspecie():
                     numAnimal = int(input('Ingrese el codigo del animal -->'))
                     if(numAnimal in codigoAnimal):
                         print('Se encontro el animal en el zoo, eliminando...')
-                        realizarDelete("espciesZoologicos", numZoo, numAnimal)
+                        realizarDelete("espciesZoologicos", numZoo, numAnimal, cur)
                         print('Se quito el animal del zoo')
                         break;
                     else:
@@ -200,14 +202,14 @@ def eliminiarEspecie():
         print('No se ingresaron los valores correctamente')
 
 
-def modificarZoo():
+def modificarZoo(cur):
     codigosZoo = []
     actu = 0
     atributo = ""
     nvoValor = ''
     try:
         print('Selecciona el Zoologico a modificar, usa cualquiera de la siguientes opciones')
-        zoologicos = informacionZoo()
+        zoologicos = informacionZoo(cur)
         for zoo in zoologicos: #Recorrer la lista de zoo
             print(f'{zoo.idZoo} ) {zoo.nombre}') #recorremos las ciudades para elegir uno
             codigosZoo.append(zoo.idZoo)
@@ -215,7 +217,7 @@ def modificarZoo():
             idZoo = int(input('Ingresa el numero del Zoo  ---> '))
             if (idZoo in codigosZoo):
                 print('Informacion actual de zoo:')
-                zoo = informacionZooEspecifico(idZoo)
+                zoo = informacionZooEspecifico(idZoo, cur)
                 """ hacer menu para que elija que actualizar """
                 try:
                     print(f'Nombre zoo:{zoo[0].nombre} tamanio: {zoo[0].tamanio} presupuesto: {zoo[0].presupuesto}')
@@ -236,7 +238,7 @@ def modificarZoo():
                             atributo = "presupuesto"
                         case _:
                             print('Dato ingresado no valido')
-                    modificar(atributo, nvoValor, idZoo)
+                    modificar(atributo, nvoValor, idZoo, cur)
                     print('Se actualizaron los datos correctamente')
                 break;
             else:
@@ -246,8 +248,8 @@ def modificarZoo():
     except :
         print('No se ingresaron los valores correctamente')
 
-def viewTables():
-    cur = encederConexion();
+def viewTables(cur):
+    # cur = encederConexion();
     contador=1;
     try:       
        #Consulta que muestra el nombre de todas las tablas de la base de datos  
@@ -262,12 +264,12 @@ def viewTables():
     except:
         print('Error en leer las tablas')
 
-def select_table(table_name):
-    cur = encederConexion();
+def select_table(table_name, conexion):
+    cur = encederConexion(conexion);
     try:        
         select_query = f"SELECT * FROM {table_name}"   
 
-        filas= impactarDB(select_query,cur,'consultas')
+        filas= impactarDB(select_query,conexion,'consultas')
 
          # Obtener los nombres de las columnas
         columnas = [column[0] for column in cur.description]
