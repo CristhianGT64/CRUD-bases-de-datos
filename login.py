@@ -9,7 +9,7 @@ def Login ():
         try:
             print("Inicio de sesion")
             usuario = input("Ingresa tu usuario --> ")
-            contrasena = input("Ingresa tu usuario --> ")
+            contrasena = input("Ingresa tu contrasena --> ")
 
         except:
             print(" ----- Usuario o contrasenia incorrectos ")
