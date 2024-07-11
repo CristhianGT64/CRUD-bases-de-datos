@@ -95,7 +95,20 @@ def realizarDelete(tabla, codigozoo, codigoAnimal, cur):
     # print(query)
     return impactarDB(query,cur, 'Eliminar')
 
+def addColumn(cur, table_name, column_name, column_type):
+    # cur = encederConexion()
+    query = f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type}"
+    return impactarDB(query,cur, 'Actualizar')
 
+def dropColumn(cur, table_name, column_name):
+    # cur = encederConexion()
+    query = f"ALTER TABLE {table_name} DROP COLUMN {column_name}"
+    return impactarDB(query,cur, 'Actualizar')
+
+def dropTable(cur, table_name):
+    # cur = encederConexion()
+    query = f"DROP TABLE {table_name}"
+    return impactarDB(query,cur, 'Eliminar')
 
 """ Pedir datos al usuario """
 def crearTabla(cur):
@@ -302,4 +315,58 @@ def select_table(table_name, conexion):
             print(formatoFila)
   
     except:
-        print('Error en leer la tabla, verifique si coloco correctamente el nombre de la tabla')      
+        print('Error en leer la tabla, verifique si coloco correctamente el nombre de la tabla')
+
+def alterTable(cur):
+    # cur = encederConexion();
+    try:
+        print('Selecciona la tabla a alterar')
+        viewTables(cur)
+        table_name = input('--->')
+        print(f'Se selecciono la tabla {table_name}')
+        
+        print('¿Que desea alterar de la tabla?')
+        print('1)Agregar Columna\n2)Quitar Columna')
+        alter = int(input('--->'))
+        match(alter):
+            case 1:
+                print('Ingresa el nombre de la nueva columna')
+                nameColumn = input('--->')
+                print('Ingresa el tipo de dato de la nueva columna')
+                typeColumn = input('--->')
+                addColumn(cur, table_name, nameColumn, typeColumn)
+            case 2:
+                print('Ingresa el nombre de la columna a eliminar')
+                nameColumn = input('--->')
+                dropColumn(cur, table_name, nameColumn)
+            case _:
+                print('Dato ingresado no valido')
+        
+    except :
+        print('No se ingresaron los valores correctamente')
+          
+
+def DropTable(cur):
+    # cur = encederConexion();
+    try:
+        print('Se ha seleccionado el comando DROP TABLE, esto eliminara la tabla')
+        print('Esta operacion no se puede deshacer, ¿desea continuar?')
+        print('1)Si\n2)No')
+        alter = int(input('--->'))
+        match(alter):
+            case 1:
+                print('Ingresa el nombre de la tabla a eliminar')
+                viewTables(cur)
+                nameTable = input('--->')
+                print(f'Se selecciono la tabla {nameTable}')
+                dropTable(cur, nameTable)
+                print('Se elimino la tabla')
+            case 2:
+                print('Operacion cancelada')
+            case _:
+                print('Dato ingresado no valido')
+        
+
+        # modificarZoo(idZoo)
+    except :
+        print('No se ingresaron los valores correctamente')

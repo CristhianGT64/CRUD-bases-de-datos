@@ -106,3 +106,14 @@ SELECT * FROM zoologicos where idZoo = 2;
 
 --UPDATE zoologicos SET nombre = 'prueba' where idZoo = 2
 UPDATE zoologicos SET nombre = 'Buenos Aires' where idZoo = 2
+
+CREATE TABLE prueba (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(50),
+    edad INT
+);
+
+ALTER TABLE prueba
+ADD COLUMN email VARCHAR(100);
+
+DROP TABLE prueba;
