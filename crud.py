@@ -247,7 +247,7 @@ def modificarZoo(cur):
         # modificarZoo(idZoo)
     except :
         print('No se ingresaron los valores correctamente')
-        
+
 def encabezadoTablas(query, conexion):
     cur = encederConexion(conexion)
     cur.execute(query)
@@ -272,14 +272,16 @@ def viewTables(cur):
         print('Error en leer las tablas')
 
 def select_table(table_name, conexion):
-    cur = encederConexion(conexion);
+    # cur = encederConexion(conexion);
     try:        
         select_query = f"SELECT * FROM {table_name}"   
 
         filas= impactarDB(select_query,conexion,'consultas')
-
+        
+        #Obtener lista de nombre del encabezado de la tabla
+        nameEncabezado= encabezadoTablas(select_query,conexion)
          # Obtener los nombres de las columnas
-        columnas = [column[0] for column in cur.description]
+        columnas = [column[0] for column in nameEncabezado]
 
          # Determinar el ancho máximo de cada columna
         col_widths = [len(col) for col in columnas]
