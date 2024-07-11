@@ -346,7 +346,7 @@ def alterTable(cur):
         print('No se ingresaron los valores correctamente')
           
 
-def DropTable(cur):
+def dropTable(cur):
     # cur = encederConexion();
     try:
         print('Se ha seleccionado el comando DROP TABLE, esto eliminara la tabla')

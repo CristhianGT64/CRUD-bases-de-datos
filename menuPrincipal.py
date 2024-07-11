@@ -15,7 +15,9 @@ def menuPrincipal (conexion):
             print('6. Otorgar Permisos')
             print('7. Quitar Permisos')
             print('8. Crear un nuevo usuario')
-            print("9. Salir")
+            print("9. Alterar una tabla")
+            print("10. Eliminar una tabla")
+            print("11. Salir")
             opcion = int(input("Ingresa una opcion: "))
         except:
             print(" ****** VALOR INVALIDO ******")
@@ -40,6 +42,10 @@ def menuPrincipal (conexion):
                 case 6:
                     print('si')
                 case 9:
+                    crud.alterTable(conexion)
+                case 10:
+                    crud.dropTable(conexion)
+                case 11:
                     continuar =False
                 case _:
                     print("Valor ingresado no valido")
