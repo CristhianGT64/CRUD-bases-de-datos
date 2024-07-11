@@ -247,6 +247,13 @@ def modificarZoo(cur):
         # modificarZoo(idZoo)
     except :
         print('No se ingresaron los valores correctamente')
+        
+def encabezadoTablas(query, conexion):
+    cur = encederConexion(conexion)
+    cur.execute(query)
+    encabezado = cur.description
+    apagarConexion(cur)
+    return encabezado
 
 def viewTables(cur):
     # cur = encederConexion();
