@@ -346,7 +346,7 @@ def alterTable(cur):
         print('No se ingresaron los valores correctamente')
           
 
-def dropTable(cur):
+def dropTableFunction(cur):
     # cur = encederConexion();
     try:
         print('Se ha seleccionado el comando DROP TABLE, esto eliminara la tabla')
@@ -367,6 +367,6 @@ def dropTable(cur):
                 print('Dato ingresado no valido')
         
 
-        # modificarZoo(idZoo)
+
     except :
         print('No se ingresaron los valores correctamente')
