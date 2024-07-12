@@ -1,4 +1,5 @@
 import crud #Importames el archivo de crud para las funciones
+import usuarios as user
 
 
 def menuPrincipal (conexion):
@@ -41,6 +42,8 @@ def menuPrincipal (conexion):
                     print("\n")    
                 case 6:
                     print('si')
+                case 8:
+                    user.crearUsuario(conexion)
                 case 9:
                     crud.alterTable(conexion)
                 case 10:
