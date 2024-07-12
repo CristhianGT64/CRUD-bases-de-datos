@@ -44,7 +44,7 @@ def menuPrincipal (conexion):
                 case 9:
                     crud.alterTable(conexion)
                 case 10:
-                    crud.dropTable(conexion)
+                    crud.dropTableFunction(conexion)
                 case 11:
                     continuar =False
                 case _:
