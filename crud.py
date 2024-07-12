@@ -97,7 +97,8 @@ def realizarDelete(tabla, codigozoo, codigoAnimal, cur):
 
 def addColumn(cur, table_name, column_name, column_type):
     # cur = encederConexion()
-    query = f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type}"
+    query = f"ALTER TABLE {table_name} ADD {column_name} {column_type}"
+    print(query)
     return impactarDB(query,cur, 'Actualizar')
 
 def dropColumn(cur, table_name, column_name):
@@ -335,10 +336,12 @@ def alterTable(cur):
                 print('Ingresa el tipo de dato de la nueva columna')
                 typeColumn = input('--->')
                 addColumn(cur, table_name, nameColumn, typeColumn)
+                print('Se agrego una nueva columna')
             case 2:
                 print('Ingresa el nombre de la columna a eliminar')
                 nameColumn = input('--->')
                 dropColumn(cur, table_name, nameColumn)
+                print(f'Se elimino la columna {nameColumn}')
             case _:
                 print('Dato ingresado no valido')
         
