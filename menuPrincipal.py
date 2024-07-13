@@ -18,7 +18,8 @@ def menuPrincipal (conexion):
             print('8. Crear un nuevo usuario')
             print("9. Alterar una tabla")
             print("10. Eliminar una tabla")
-            print("11. Salir")
+            print("11. Eliminar un Pais")
+            print("12. Salir")
             opcion = int(input("Ingresa una opcion: "))
         except:
             print(" ****** VALOR INVALIDO ******")
@@ -48,7 +49,10 @@ def menuPrincipal (conexion):
                     crud.alterTable(conexion)
                 case 10:
                     crud.dropTableFunction(conexion)
-                case 11:
+                case 11:                   
+                    idPais=crud.opcionEliminarPais(conexion) 
+                    crud.eliminarPais(idPais,conexion)    
+                case 12:
                     continuar =False
                 case _:
                     print("Valor ingresado no valido")
