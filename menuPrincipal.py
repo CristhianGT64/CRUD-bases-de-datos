@@ -42,7 +42,9 @@ def menuPrincipal (conexion):
                     crud.select_table(nameTable, conexion)
                     print("\n")    
                 case 6:
-                    print('si')
+                    user.otorgarPermisosUsuario(conexion)
+                case 7:
+                    user.quitarPermisosUsuario(conexion)
                 case 8:
                     user.crearUsuario(conexion)
                 case 9:
