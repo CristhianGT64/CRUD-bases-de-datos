@@ -152,7 +152,7 @@ def crearTabla(cur):
 
 def crearZoo(cur):
     tuplas = []
-    contador = 0
+    #contador = 0
     numCiudad = 0
     try:
         tuplas.append(input('Ingresa el Id del Zoo --->'))
@@ -162,13 +162,14 @@ def crearZoo(cur):
         tuplas.append(float(input('Ingresa el presupuesto--->')))
         print('Ciudad que se encuentra el zoo, usa cualquiera de la siguientes opciones')
         ciudades = informacionCiudades(cur)
+        ciudadesId = [ciudad.idCiudad for ciudad in ciudades]
         print('Se encontraron las ciudades')
         for ciudad in ciudades:
             print(f'{ciudad.idCiudad} ) {ciudad.nombre}') #recorremos las ciudades para elegir uno
-            contador += 1
-        while (numCiudad <= 0 or numCiudad > contador):
+            #contador += 1
+        while (numCiudad not in ciudadesId):
             numCiudad = int(input('Ingresa el numero de la ciudad  ---> '))
-            if( numCiudad <= 0 or numCiudad > contador ):
+            if(numCiudad not in ciudadesId):
                 print('Valor ingresado no valido, porfavor vuelve a intentarlo')
         tuplas.append(numCiudad)
         # print(tuplas)
