@@ -373,3 +373,76 @@ def dropTableFunction(cur):
 
     except :
         print('No se ingresaron los valores correctamente')
+
+def eliminarPais(idPais, conexion):
+    try:
+        #cur = conexion.cursor()
+        #queryEliminar = "BEGIN TRAN\n"
+
+        # Iniciar transacción
+        conexion.execute("BEGIN TRAN")
+        
+        # Verificar que el país exista
+        query_pais = f"SELECT * FROM paises WHERE idPais = {idPais}"
+        pais = impactarDB(query_pais, conexion, 'consultas')
+        if not pais:
+            raise Exception("El país no existe.")
+        
+        # Obtener ciudades relacionadas con el país
+        query_ciudades = f"SELECT idCiudad FROM ciudades WHERE idPais = {idPais}"
+        ciudades = impactarDB(query_ciudades, conexion, 'consultas')
+        ciudades_id = [ciudad[0] for ciudad in ciudades]
+        
+        # Obtener zoológicos relacionados con las ciudades
+        if ciudades_id:
+            ciudades_id_str = ', '.join(map(str, ciudades_id))
+            query_zoologicos = f"SELECT idZoo FROM zoologicos WHERE idCiudad IN ({ciudades_id_str})"
+            zoologicos = impactarDB(query_zoologicos, conexion, 'consultas')
+            zoologicos_id = [zoo[0] for zoo in zoologicos]
+            
+            # Manda advertencias para los zoológicos relacionados
+            if zoologicos_id:
+                continuar = True
+                while(continuar):
+                    opcionEliminar= int(input("Seleccionar 1 si quiere eliminar los zoologicos relacionados al pais(ciudad), 2 para regresar al ménu principal: "))
+                    match(opcionEliminar):
+                        case 1:
+                            zoologicos_ids_str = ', '.join(map(str, zoologicos_id))
+                            query_delete_zoologicos = f"DELETE FROM zoologicos WHERE idZoo IN ({zoologicos_ids_str})"
+                            impactarDB(query_delete_zoologicos, conexion)
+                            continuar =False
+                        case 2: 
+                            continuar =False
+                            raise Exception("Deber modificar los datos zoologico desde el menu principal para poder eliminar el pais")
+                        case _:
+                            print("Valor ingresado no valido")                       
+            # Eliminar ciudades relacionadas
+            query_delete_ciudades = f"DELETE FROM ciudades WHERE idCiudad IN ({ciudades_id_str})"
+            impactarDB(query_delete_ciudades, conexion)
+        
+        # Obtener información de animales relacionada con el país
+        query_informacion_animales = f"SELECT numIdentificacion FROM informacionAnimales WHERE idPais = {idPais}"
+        informacion_animales = impactarDB(query_informacion_animales, conexion, 'consultas')
+        informacion_animales_id = [info[0] for info in informacion_animales]
+
+        # Eliminar especieAnimales relacionados con informacionAnimales
+        if informacion_animales_id:
+            informacion_animales_ids_str = ', '.join(map(str, informacion_animales_id))
+            query_delete_especie_animales = f"DELETE FROM especieAnimales WHERE idInformacionEspecie IN ({informacion_animales_ids_str})"
+            impactarDB(query_delete_especie_animales, conexion)
+        
+        # Eliminar información de animales relacionada con el país
+        query_delete_informacion_animales = f"DELETE FROM informacionAnimales WHERE idPais = {idPais}"
+        impactarDB(query_delete_informacion_animales, conexion)  
+
+        # Eliminar el país
+        query_delete_pais = f"DELETE FROM paises WHERE idPais = {idPais}"
+        impactarDB(query_delete_pais, conexion)
+        
+        # Confirmar la transacción
+        conexion.commit()
+        print("El país y las filas relacionadas se han eliminado correctamente.")
+    
+    except Exception as e:
+        conexion.rollback()
+        print("Error en la transacción, cambios revertidos:", e)
