@@ -78,6 +78,10 @@ def InformacionAnimalZoo(numZoo, cur):
     query = 'SELECT * FROM espciesZoologicos WHERE idZoo = ' + str(numZoo)
     return impactarDB(query,cur, 'consultas')
 
+def InformacionPais(cur):
+    query = 'SELECT * FROM Paises' 
+    return impactarDB(query,cur, 'consultas')
+
 def realizarInsert(lista, nombreTabla, cur):
     # cur = encederConexion()
     query = 'INSERT INTO ' + nombreTabla + ' VALUES ( '
@@ -446,3 +450,21 @@ def eliminarPais(idPais, conexion):
     except Exception as e:
         conexion.rollback()
         print("Error en la transacción, cambios revertidos:", e)
+
+def opcionEliminarPais(cur):
+    contador = 0
+    numPais= 0;
+    try: 
+        print('Selecciona un pais a eliminar')
+        paises = InformacionPais(cur) #Mandar a llamar los zoo en db
+        for pais in paises: #Recorrer la lista de zoo
+            print(f'{pais.idPais} ) {pais.nombre}') #recorremos las ciudades para elegir uno
+            contador += 1;
+        while(numPais <= 0 or numPais > contador ): 
+            numPais = int(input('Ingresa el numero del pais  a eliminar---> '))
+            if( numPais <= 0 or numPais > contador ):
+                print('Valor ingresado no valido, porfavor vuelve a intentarlo')
+
+        return numPais;      
+    except :
+        print('Valor incorrecto o no valido')        
